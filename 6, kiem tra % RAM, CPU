@@ -1,0 +1,7 @@
+#!/bin/bash
+# %CPU
+a=$(ps -eo pcpu | awk '{tongcpu+=$1} END {print tongcpu}')
+echo "tong % CPU la: $a"
+# %MEM
+b=$(ps -eo pmem | awk '{tongmem+=$1} END {print tongmem}')
+echo "tong % MEM la: $b"
