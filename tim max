@@ -1,0 +1,13 @@
+#!/bin/bash
+echo "nhap 3 so tu ban phim: "
+read a
+read b
+read c
+max=$a
+if [ $max -le $b ]; then
+let max=b
+fi
+if [ $max -le $c ]; then
+let max=c
+fi
+echo " gia tri lon nhat la: $max"
