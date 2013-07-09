@@ -1,0 +1,10 @@
+#!/bin/bash
+echo -n "nhap file can tim kiem: "
+read file
+name_file=$(find / -name $file)
+echo "ket qua: $name_file"
+if [ -e $name_file ]; then
+echo "file ton tai"
+else
+echo "file khong ton tai"
+fi
