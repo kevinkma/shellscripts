@@ -1,0 +1,10 @@
+#!/bin/bash
+echo "tinh giai thua: "
+read n
+gt=1
+while [ $n -gt 0 ]
+do
+let gt=gt\*n
+let n=n-1
+done
+echo "giai thua= $gt"
