@@ -1,0 +1,13 @@
+Lệnh echo
+Dùng để hiển thị dòng văn bản, giá trị biến …
+Cú pháp : echo [options] [chuỗi, biến…]
+Các option :
+-n : không in ký tự xuống dòng.
+-e : cho phép hiểu những ký tự theo sau dấu \ trong chuỗi
+\a : alert (tiếng chuông)
+\b : backspace
+\c : không xuống dòng
+\n : xuống dòng
+\r : về đầu dòng
+\t : tab
+\\ : dấu \
