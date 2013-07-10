@@ -1,41 +1,62 @@
-1, 
+ 
 grep là lệnh tìm kiếm các dòng có chứa một chuỗi hoặc từ khóa trong file. Theo mặc định, grep in những dòng phù hợp. Sử dụng grep để tìm kiếm các dòng văn bản phù hợp với một hoặc nhiều biểu thức thông thường, và in ra những dòng phù hợp.
 Cú pháp của lệnh grep :
+
 Code:
 grep 'word' filename
 grep 'string1 string2'  filename
 cat otherfile | grep 'something'
 command | grep 'something'
+
 Sử dụng tìm kiếm trong file :
 Tìm user tên boo trong file /etc/passwd
+
 Code:
 $ grep boo /etc/passwd
+
 Bạn có thể bỏ qua các kết quả không mong muốn khác như Boo, BOO và kết hợp tất cả các khác với tùy chọn -i :$
+
 Code:
 grep -i "boo" /etc/passwd
+
 Bạn có thể tìm kiếm một chuỗi trong tất cả các tập tin :
+
 Code:
 grep -r "192.168.0.1" /etc/
+
 Sử dụng tìm kiếm chính xác :
 Khi bạn sử dụng tìm kiếm cho từ khóa “boo”, grep sẽ tra lại những kết quả như fooboo, boo123, .v..v . Bạn có thể dùng tùy chọn -w để chỉ đưa ra kết quả chính xác với từ khóa
+
 Code:
 $ grep -w "boo" /path/to/file
+
 Sử dụng grep để tìm 2 từ khác nhau :
+
 Code:
 $ egrep -w 'word1|word2' /path/to/file
+
 Đếm số dòng kết quả được tìm thấy với tùy chọn -c :
+
 Code:
 $ grep -c 'word' /path/to/file
+
 Bạn cũng có thể sử dụng tùy chon -n để hiển thị thứ tự mỗi dòng của kết quả :
+
 Code:
 $ grep -n 'word' /path/to/file
+
 Bạn có thể sử dụng tùy chọn -v để in đảo ngược kết quả. Kết quả chỉ in ra những dòng không chứa các từ đã đưa ra. Ví dụ như in tất cả các dòng không chứa từ “bar” :
+
 Code:
 $ grep -v bar /path/to/file
+
 Sử dụng grep kết hợp với các lệnh khác:
 Ví dụ in tên các thiết bị đĩa cứng :
+
 Code:
 # dmesg | egrep '(s|h)d[a-z]'
+
 Hiển thị tên CPU:
+
 Code:
 # cat /proc/cpuinfo | grep -i 'Model'
