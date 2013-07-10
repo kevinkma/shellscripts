@@ -1,0 +1,24 @@
+Tuần 1:
+
+1. Viết chương trình in ra màn hình chữ “Truong Dai Hoc Hoa Sen”
+
+2. Viết chương trình in ra các tham số của người dùng khi chạy script
+
+3. Tạo một hàm in ra màn hình số 1,2,3…..100
+
+4. Tạo user1 với đầy đủ thông tin. Dùng lệnh finger để xác định lại thông tin của user1.
+
+5. Dùng lệnh talk, write để thực hiện chat đơn giản
+
+6. Dùng lệnh wall để gởi thông báo cho tất cả màn hình của user.
+
+7. Dùng lệnh df để xác định các partition của hệ thống.
+
+8. Dùng lệnh w để xác định ai đang login vào hệ thống
+
+giai:
+1, 
+#!/bin/bash
+echo "Truong Dai Hoc Hoa Sen"
+2,
+#!/bin/bash
