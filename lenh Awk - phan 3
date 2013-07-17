@@ -1,0 +1,130 @@
+Các biến định nghĩa sẵn trong AWK (phần 2) 
+
+Biến RS - Record separator - phân tách các record
+     Ví dụ xét một tập bản ghi có dạng sau
+[oracle@db tmp]$ cat records.txt
+101,John Doe:102,Jason Smith:103,Raj Reddy:104,Anand Ram:105,Jane Miller
+[oracle@db tmp]$
+     Các record được ngăn cách nhau bởi dấu : chứ không phải ký tự ngắt dòng thông thường. Do đó, để chỉ thị cho AWK
+     hiểu được điều này, ta có thể sử dụng biến RS như sau:
+
+
+[oracle@db tmp]$ awk 'BEGIN {RS=":"; FS=","; OFS=", "} \ 
+
+{print $1,$2}' ./records.txt
+101, John Doe
+102, Jason Smith
+103, Raj Reddy
+104, Anand Ram
+105, Jane Miller
+[oracle@db tmp]$
+
+     Trường hợp phức tạp hơn, nếu các trường phân tách cũng bởi quy tắc liên quan tới dấu ngắt dòng như sau:
+[oracle@db tmp]$ cat records.txt
+101
+John Doe
+----
+102
+Jason Smith
+----
+103
+Raj Reddy
+----
+104
+Anand Ram
+----
+105
+Jane Miller
+[oracle@db tmp]$
+
+    Lúc này, dấu ngắt record là cụm ---- và dấu xuống dòng \n, trong khí đó, dấu ngắt trường là dấu ngắt dòng. Áp dụng 
+    lên AWK như sau:
+[oracle@db tmp]$ awk 'BEGIN {FS="\n"; RS="----\n"; OFS=", "} \
+
+{print $1,$2}' \
+./records.txt
+101, John Doe
+102, Jason Smith
+103, Raj Reddy
+104, Anand Ram
+105, Jane Miller
+
+ORS - Output Record Separator - Phân tách các record đầu ra
+     Tác dụng tương tự như RS nhưng có hiệu lực ở đầu ra. Ví dụ thay vì hiển thị ngắt các record kết quả bằng dấu ngắt
+     dòng, ta có thể sử dụng các ký tự khác. Ví dụ như sau:
+[oracle@db tmp]$ awk 'BEGIN {FS="\n"; RS="----\n"; \
+OFS="\n"; ORS="\n==========\n"} \
+
+{print $1,$2}' ./records.txt
+101
+John Doe
+==========
+102
+Jason Smith
+==========
+103
+Raj Reddy
+==========
+104
+Anand Ram
+==========
+105
+Jane Miller
+==========
+
+NR - Number of records, biến đếm thứ tự bản ghi
+    Biến này khá hữu dụng trong khi xử lý trong vòng lặp. Khi chạy trong vòng lặp của BODY thì nó sẽ trả về giá trị của
+    thứ tự record hiện thời (Number of the Record). Còn nếu chạy ở vị trí của khối END, nó sẽ hiển thị tổng các record
+    trong file (Number of Records).
+
+    Ví dụ:
+[oracle@db tmp]$ awk 'BEGIN {FS="\n"; RS="----\n"; ORS="\n==========\n"} \
+
+{print "Name of the record",NR,"is",$2}' ./records.txt
+Name of the record 1 is John Doe
+==========
+Name of the record 2 is Jason Smith
+==========
+Name of the record 3 is Raj Reddy
+==========
+Name of the record 4 is Anand Ram
+==========
+Name of the record 5 is Jane Miller
+==========
+[oracle@db tmp]$
+
+FILENAME - Tên file hiện thời
+     Biến này có ích khi phải xử lý một danh sách file và phải chỉ định rõ hiện tại đang xử lý file nào. Biến này sẽ trả
+     về tên file hiện thời đang được xử lý.
+[oracle@db tmp]$ awk 'BEGIN {FS="\n"; RS="\n----\n"; OFS=","}\
+ {print "<<",NR,">>",$1,$2," in file -->",FILENAME}' records.txt recordbk.txt
+<<,1,>>,101,John Doe, in file -->,records.txt
+<<,2,>>,102,Jason Smith, in file -->,records.txt
+<<,3,>>,103,Raj Reddy, in file -->,records.txt
+<<,4,>>,104,Anand Ram, in file -->,records.txt
+<<,5,>>,105,Jane Miller, in file -->,records.txt
+<<,6,>>,bk101,John Doe, in file -->,recordbk.txt
+<<,7,>>,bk102,Jason Smith, in file -->,recordbk.txt
+<<,8,>>,bk103,Raj Reddy, in file -->,recordbk.txt
+<<,9,>>,bk104,Anand Ram, in file -->,recordbk.txt
+<<,10,>>,bk105,Jane Miller, in file -->,recordbk.txt
+[oracle@db tmp]$
+
+FNR - File "Number of Record", số thứ tự bản ghi ứng với file
+Ở các phần trên, ta đã xét tới NR, NR cho phép in ra thứ tự record được xử lý trong quá trình lặp của AWK. Tuy nhiên, 
+ví dụ trước cho ta thấy vấn đề đó là không hiển thị được thứ tự của record trong file chứa nó. Điều này có thể được giải
+quyết thông qua biến FNR. Ví dụ:
+
+[oracle@db tmp]$ awk 'BEGIN {FS="\n"; RS="\n----\n"; OFS=","}\
+ {print "<<STT:",NR,">><<",FNR,">>",$1,$2,\ 
+" in file -->",FILENAME}' records.txt recordbk.txt
+<<STT:,1,>><<,1,>>,101,John Doe, in file -->,records.txt
+<<STT:,2,>><<,2,>>,102,Jason Smith, in file -->,records.txt
+<<STT:,3,>><<,3,>>,103,Raj Reddy, in file -->,records.txt
+<<STT:,4,>><<,4,>>,104,Anand Ram, in file -->,records.txt
+<<STT:,5,>><<,5,>>,105,Jane Miller, in file -->,records.txt
+<<STT:,6,>><<,1,>>,bk101,John Doe, in file -->,recordbk.txt
+<<STT:,7,>><<,2,>>,bk102,Jason Smith, in file -->,recordbk.txt
+<<STT:,8,>><<,3,>>,bk103,Raj Reddy, in file -->,recordbk.txt
+<<STT:,9,>><<,4,>>,bk104,Anand Ram, in file -->,recordbk.txt
+<<STT:,10,>><<,5,>>,bk105,Jane Miller, in file -->,recordbk.txt
