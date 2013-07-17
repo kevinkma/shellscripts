@@ -1,0 +1,52 @@
+#!/bin/bash
+while [ TRUE ]
+do
+echo        "MENU"
+echo '[1] Tao danh sach'
+echo "2) In danh sach"
+echo "3) Tim kiem user"
+echo "4) Them user"
+echo "5) Xoa user"
+echo "0) Thoat"
+read -p "ban can thuc hien: " chon
+echo ""
+clear
+case $chon in
+1)
+read -p "nhap so sinh vien: " n
+for i in `seq 1 $n`
+do
+read -p "nhap ten sinh vien $i: "  ten
+read -p "nhap nam sinh: " nam
+read -p "nhap que quan: " que
+read -p "nhap chuyen nganh: " nganh
+echo "$ten     $nam  $que   $nganh">>danhsach.txt
+done
+;;
+2)
+echo " Danh sach sinh vien "
+cat danhsach.txt
+;;
+3)
+echo "tim kiem user"
+read -p "nhap ten user can tim: " ten
+cat danhsach.txt | awk '$1 ~/'$ten'/{print$0}'
+;;
+4)
+echo "them user"
+read -p "nhap thong tin user thu $i: " ten
+read -p "nhap nam sinh: " nam
+read -p "nhap que quan: " que
+read -p "nhap chuyen nganh: " nganh
+echo "$ten   $nam  $que  $nganh">>danhsach.txt
+;;
+5)
+echo "xoa user"
+read -p "nhap user can xoa: " ten
+cat danhsach.txt | grep -v $ten>danhsach.txt
+echo "da xoa xong"
+;;
+0)
+exit
+esac
+done
