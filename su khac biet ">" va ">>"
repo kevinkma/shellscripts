@@ -1,0 +1,11 @@
+">>" sẽ thêm data vao file 
+">" xoa nd file cu và chep nội dung mới vào
+VD
+#!/bin/bash
+echo "tao file kevin.txt"
+echo "kevin kien">kevin.txt
+echo "xong"
+echo "hoc vien ky thuat mat ma">>kevin.txt
+cat kevin.txt
+echo "an toan thong tin">kevin.txt
+echo "dung"
