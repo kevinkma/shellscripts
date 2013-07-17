@@ -1,0 +1,81 @@
+Các biến định nghĩa sẵn trong AWK (phần 1)
+Biến FS - Field separator - Ký tự ngăn cách các trường
+     Mặc định ký tự dùng để ngăn cách các trường là dấu cách (một hoặc nhiều dấu cách cạnh nhau), để chỉ định lại giá tr
+     ị này, ta sẽ sử dụng giá trị biến FS, ví dụ với file /etc/passwd dấu : được sử dụng để ngăn cách các trường: 
+     Ngoài việc chỉ định thông qua tùy chọn -F
+[oracle@db ~]$ awk -F: '{print $1}' /etc/passwd | more
+root
+bin
+daemon
+adm
+lp
+sync
+shutdown
+halt
+
+    Ta cũng có thể sử dụng biến FS như sau:
+[oracle@db ~]$ awk 'BEGIN { FS=":"} \
+{print $1}' /etc/passwd
+root
+bin
+daemon
+adm
+lp
+sync
+
+    Một thách thức đặt ra cho việc xử lý, đó là trường hợp các record sử dụng nhiều kiểu phân tách trường, 
+    ví dụ nội dung một file như sau:
+[oracle@app tmp]$ cat records.txt
+101,John Doe:CEO%10000
+102,Jason Smith:IT Manager%5000
+103,Raj Reddy:Sysadmin%4500
+104,Anand Ram:Developer%4500
+105,Jane Miller:Sales Manager%3000
+[oracle@app tmp]$
+
+   Trong file trên, các ký tự được sử dụng để phân tách trường, đó là ba kí tự ":%,". Ta có thể sử dụng biểu thức chính 
+   quy để chỉ định danh sách các biến FS và pattern. Ví dụ
+[oracle@app tmp]$ awk 'BEGIN { FS="[:,%]"} \
+{print $1,"\t",$3}' records.txt
+101      CEO
+102      IT Manager
+103      Sysadmin
+104      Developer
+105      Sales Manager
+[oracle@app tmp]$
+
+Biến OFS - Output field separator - phân tách trường trong output
+Biến OFS dùng để chỉ định ký tự phân tách các trường trong kết quả. Không có biến IFS bởi nó được chỉ định thông qua FS
+. Mặc định giá trị của OFS là các dấu cách. Ví dụ với input là file records.txt như ở trên, nếu ta muốn tự chèn các ký tự
+"--" vào giữa hai trường kết quả, thì sẽ thu được như sau:
+
+[oracle@app tmp]$ awk 'BEGIN { FS="[:,%]"} \
+{print $1,"--",$3}' records.txt
+101 -- CEO
+102 -- IT Manager
+103 -- Sysadmin
+104 -- Developer
+105 -- Sales Manager
+[oracle@app tmp]$
+
+    Luôn có những dấu cách ở giữa các trường kết quả, và ký tự "--" cũng được coi là một trường. Để tùy biến ký tự phân 
+    tách ở kết quả trong trường hợp kết quả có nhiều trường, ta sử dụng biến OFS như sau:
+[oracle@app tmp]$ awk 'BEGIN { FS="[:,%]"; OFS="--"} \
+{print $1,$3}' records.txt
+101--CEO
+102--IT Manager
+103--Sysadmin
+104--Developer
+105--Sales Manager
+[oracle@app tmp]$
+
+    Chú ý rằng, nếu có dấu phảy trong lệnh print ở trên, toán hạng hai phía dấu phảy được coi là các trường, và khi đó 
+    awk sẽ sử dụng OFS để phân tách chúng. Nếu như trong print không có dấu phảy, thì OFS sẽ không được sử dụng, ví dụ:
+
+[oracle@app tmp]$ awk 'BEGIN { FS="[:,%]"; OFS="--"} \
+{print $1$3}' records.txt
+101CEO
+102IT Manager
+103Sysadmin
+104Developer
+105Sales Manager
