@@ -1,0 +1,66 @@
+Là một ngôn ngữ xử lý file text, rất mạnh đối với các file text mà mỗi dòng là một dạng bản ghi (record format), tức là 
+có các trường, cột được phân tách nhau bởi một ký tự phân tách nào đó.
+     Được phát triển bởi ba lập trình viên A. Aho, P. Weinberger và B.W. Kerninghan, do đó có tên là AWK. AWK trên các 
+     phiên bản phân phối Linux hiện tại đều là GNU AWK tương thích với phiên bản AWK nguyên thủy và NAWK (New AWK). 
+     Cú pháp của AWK rất gần gũi với ngôn ngữ C.
+
+
+    Cú pháp lệnh
+awk -Fs '/pattern/ {action}' input_file
+
+    hoặc
+awk -Fs '{action}' input_file
+
+
+    hoặc nếu muốn chỉ định danh sách các action từ một file riêng lẻ
+awk -Fs -f script.awk input_file
+
+
+trong đó:
+-F (field separator) chỉ định ký tự phân tách, nếu không chỉ định, mặc định sẽ là một dấu cách.
+/pattern/ và {action} cần được bao trong cặp nháy đơn.
+/pattern/ là tùy chọn không bắt buộc. Nó mô tả mẫu lọc để tìm các record phù hợp
+{action} sẽ liệt kê danh sách các hành động thực hiện lên các record. Các lệnh này bắt buộc phải bao trong cặp ngoặc 
+nhọn.
+input_file: file đầu vào cho việc xử lý.
+script.awk: file chứa các lệnh cho awk, không nhất thiết phải có phần mở rộng là awk nhưng nên để vậy để dễ quản lý
+
+    Ví dụ tôi muốn tìm và in ra shell của người dùng cuongpt với awk trong file /etc/passwd, tôi có thể làm như sau:
+awk -F: '/cuongpt/ {print $7}' /etc/passwd
+[cuongpt@cuongpt-laptop ~]$ awk -F: '/cuongpt/ {print $7}' /etc/passwd
+/bin/bash
+
+
+Cú pháp một chương trình (Các khối BEGIN, body, END)
+1. Khối BEGIN
+cú pháp
+BEGIN { awk_commands }
+Khối này chỉ được chạy duy nhất một lần lúc bắt đầu, trước khi awk thực thi khối body cho tất cả các dòng trong file
+input
+- khối này không bắt buộc
+- từ khóa BEGIN bắt buộc phải viết hoa
+- có thể cho nhiều lệnh vào trong khối BEGIN
+- khối BEGIN này có thể hữu dụng cho việc in các report headers, khởi tạo các biến
+2. Khối body
+    cú pháp
+/pattern/ {action}
+    khối lệnh trong body được thực thi mỗi lần duyệt một dòng trong input file. Ví dụ nếu trong input file có 10 record 
+    thì body sẽ được thực thi 10 lần. Không có từ khóa nào đánh dấu cho khối body này.
+    Khối begin phải được viết đúng cú pháp awk. Nếu như không chỉ định một body loop thì chỉ có các lệnh ở BEGIN được á
+    p dụng cho từng dòng trong input file. Vì thế chỉ nên sử dụng BEGIN để làm những việc không liên quan tới xử lý các 
+    record trong file.
+3. Khối END
+    cú pháp
+END { awk_commands }
+Khối END chỉ được thực thi một lần ngay sau khi khối body xử lý xong toàn bộ file input. Một số đặc tính của khối END
+- không bắt buộc
+- từ khóa END phải được viết hoa
+- có thể có nhiều lệnh trong khối END
+- Khối này hữu ích cho việc in report footer và làm các thao tác dọn dẹp
+    Ví dụ
+[cuongpt@cuongpt-laptop ~]$ awk 'BEGIN {FS=":"; print "Begin processing"} \
+/cuongpt/ {print $7} \
+END { print "Finish."}' /etc/passwd
+Begin processing
+/bin/bash
+Finish.
