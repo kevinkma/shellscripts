@@ -1,0 +1,27 @@
+- head < tên file>: hiển thị các dòng đầu tiên.
+- tail < tên file>: hiển thị các dòng cuối cùng (có thể hữu ích trong những trường hợp như khi bạn muốn xem thông tin
+cuối cùng của một file hệ thống).
+
+VD: + đọc 3 dòng đầu tiên từ trên xuống của 1 file.
+ head -n 3 line
+
+   + đọc 3 dòng đầu tiên từ dưới lên của 1 file.
+ tail -n 3 line
+
+   + đọc 10 dòng đầu tiên từ trên xuống kể từ dòng thứ 3 của 1 file.
+ tail -n +3 line | head -n 10
+ 
+#!/bin/bash
+#dau tien minh se tao 1 file so tu 1-20
+echo "tao file number.txt"
+for i in `seq 1 20`
+do
+echo $i>>number.txt
+done
+echo "doc 3 dong dau tien tu tren xuong"
+head -n 3 "number.txt"
+echo "doc 3 dong dau tien tu dui len cua 1 file"
+tail -n 3 "number.txt"
+echo "doc 10 dong dau tien tu tren xung tu dng thu 3"
+tail -n +3 "number.txt" | head -n 10
+
