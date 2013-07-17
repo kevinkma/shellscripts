@@ -1,0 +1,13 @@
+bai tap: Tạo một file text tên các sinh viên, năm sinh, quê quán, chuyên ngành. 
+
+#!/bin/bash
+echo "tao 1 file sv.txt"
+read -p "nhap so sinh vien: " n
+for i in `seq 1 $n`
+do
+read -p "nhap ten sinh vien $i: "  ten
+read -p "nhap nam sinh: " nam
+read -p "nhap que quan: " que
+read -p "nhap chuyen nganh: " nganh
+echo "$ten     $nam  $que   $nganh">>sv.txt
+done
