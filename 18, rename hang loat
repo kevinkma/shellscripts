@@ -1,0 +1,9 @@
+#!/bin/sh
+// đổi hang loạt file.rd.txt thanh file .rb
+for f in *.rb.txt; do 
+mv "$f" "${f%.txt}"; 
+done 
+// đổi hàng loạt file.txt thành file.rb
+for f in *.txt; do 
+mv "$f" "${f%.txt}.rb"; 
+done
